@@ -11,10 +11,14 @@ Finds games based on a survey; uses Node, MySQL, and Express
 
 
 To Do:
-[ ] Add player option
-[ ] Add game option
+[x] Searching for players or games
+[x] Survey creation for adding a player
+[ ] Survey creation for adding a game
+[ ] Validate adding
 [ ] Entered player calculates best game match for them
+[ ] Shows Results
 [ ] Entered player calculates best game matches if tied
+
 [ ] Entered player calculates best 5 players to play with based on how close they match
 [ ] Entered player calculates matches with a number of other players (number either entered in or based on how much they like multiplayer games...or how much their resulting game is multiplayer)
 [ ] Entered game brings up which players would most like to play it.

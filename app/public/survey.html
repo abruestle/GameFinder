@@ -27,38 +27,11 @@
             <h3 class="panel-title" id="TitleAdd"><strong>Add Game</strong></h3>
           </div>
           <div class="panel-body">
-    <button class="btn btn-primary" type="submit" id="change">Switch to adding a Player</button>
-  <form method="POST" class="needs-validation" novalidate>
-    <div id= "surveyArea"></div>
-    <button class="btn btn-primary" type="submit" id="add-btn">Submit game</button>
-  </form>
-          <!--   <form  role="form">
-
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name">
-              </div>
-
-              <div class="form-group">
-                <label for="role">Role</label>
-                <input type="text" class="form-control" id="role">
-              </div>
-
-              <div class="form-group">
-                <label for="age">Age</label>
-                <input type="text" class="form-control" id="age">
-              </div>
-
-              <div class="form-group">
-                <label for="force-points">Force Points</label>
-                <input type="text" class="form-control" id="force-points">
-              </div>
-
-            </form> -->
-            <!-- <br>
-            <div class="text-right">
-              <button type="submit" class="btn btn-primary btn-md" id="add-btn"><span class="glyphicon glyphicon-fire"></span> Add to the Force</button>
-            </div> -->
+              <button class="btn btn-primary" type="submit" id="change">Switch to adding a Player</button>
+            <form method="POST" class="needs-validation" novalidate>
+              <div id= "surveyArea"></div>
+              <button class="btn btn-primary" type="submit" id="add-btn">Submit game</button>
+            </form>
           </div>
         </div>
 
@@ -73,44 +46,97 @@
     var gameTypes = ["Video Game","Board Game","Tabletop RPG","Card Game"];
     var consolesAvailable = ["Computer","Switch","PlayStation 4","Xbox One","Wii U","Nintendo 3DS","PlayStation Vita","Wii","PlayStation 3","XBox 360","Nintendo DS","PlayStation Portable"];
     var icons = ["glyphicon glyphicon-off","glyphicon glyphicon-king","glyphicon glyphicon-comment","glyphicon glyphicon-modal-window"];
-    var surveyQuestions = ["multiplayer games", "competitive games", "taking time", "stories", "turn based games", "fantasy vs. sci-fi", "convoluted game design or play", "difficult games", "ABSOLUTE POWER!", "options"];
+    var surveyQuestions = ["multiplayer games", "competitive games", "taking time", "stories", "turn based games", "fantasy vs sci-fi", "convoluted game design or play", "difficult games", "ABSOLUTE POWER", "options"];
     var surveyAnswers = ["Strongly Dislike","Dislike","Neither Like Nor Dislike","Like","Love"];
+    var state = "";
 
-function createSurveyPart(name, type) {
+function arrayToSentence (arr, type) {
+  if(arr) {
+    switch (arr.length) {
+      case 0:
+        return "";
+        break;
+      case 1:
+        return arr[0];
+        break;
+      case 2:
+        return (arr[0] + " " + arr[1]);
+        break;
+      default:
+        console.log(arr);
+        var arr2 = arr.slice(0,arr.length-1);
+        if (type == "oxford"){
+          return (arr2.join(', ') + ", and " + arr[arr.length - 1]);
+        } else if (type == "list") {
+          return arr.join(', ');
+        } else {
+          return (arr2.join(', ') + " and " + arr[arr.length - 1]);
+        }
+        break;
+    }
+  }
+}
+
+function createSurveyPart(adder, name, type, arr) {
   //Create the row...questions have both the radial buttons and have the name worked into a question, so if/then statement for the whole thing works best
   if (type == "question") {
-    html = '<div class="form-row"><div class="col-lg-6"><label for="validation'+name.replace(/\s/g,'')+'">My feelings about '+name+':</label><p>';
-    for(i = 0; i < 5; i++){
-      html = html + '<label class="radio-inline"><input type="radio" name="optradio'+name.replace(/\s/g,'')+'" value = '+i+'>'+surveyAnswers[i]+'</label>';
+    html = '<div class="form-row"><div class="col-lg-6"><label for="optradio'+name.replace(/\s/g,'')+'">';
+    if(adder == "player"){
+      html = html + 'My feelings about '+name+':</label><p>';
+    } else {
+      html = html + 'This game is for those who _______ '+name+':</label><p>';
     }
-    html = html + '<p><div class="invalid-feedback">Please provide an answer.</div></div></div><br>';
+    for(i = 0; i < 5; i++){
+      j = i + 1;
+      html = html + '<label class="radio-inline"><input type="radio" name="optradio'+name.replace(/\s/g,'')+'" value = '+j+'>'+surveyAnswers[i]+'</label>';
+    }
+    html = html + '<p>';
+    //<div class="invalid-feedback">Please provide an answer.</div></div></div><br>';
 
   } else {
-    html = '<div class="form-row"><div class="col-lg-6"><label for="validation'+name.replace(/\s/g,'')+'">'+name+'</label><input type="text" class="form-control" id="validation'+name.replace(/\s/g,'')+'" placeholder="'+name+'" required><div class="invalid-feedback">Please provide an answer.</div></div></div><br>';
+    html = '<div class="form-row"><div class="col-lg-6"><label for="text'+name.replace(/\s/g,'')+'">'+name+'</label><input type="text" class="form-control" id="text'+name.replace(/\s/g,'')+'" placeholder="'+name+'" required></div></div><br>';
+    // <div class="invalid-feedback">Please provide an answer.</div>
   }
   $("#surveyArea").append(html);
 }
+
+function findMatchGame(argument) {
+  // body...
+
+}
 function createPagePlayer() {
+  state = "player";
   $("#surveyArea").html();  
   $("#TitleAdd").text("Add Player");  
-  $("#change").text("Switch to adding a Player");  
+  $("#change").text("Switch to adding a Game");
   $("#add-btn").html("Submit Player and Search for Matches");  
-  $("#surveyArea").html();  
 
-  createSurveyPart("Name");
-  createSurveyPart("Favorite Type of Game","dropdown",gameTypes);
-  createSurveyPart("Bio");
-  createSurveyPart("Consoles Owned","multiple",consolesAvailable)
+  createSurveyPart("player", "Name");
+  createSurveyPart("player", "Favorite Type of Game","dropdown",gameTypes);
+  createSurveyPart("player", "Bio");
+  createSurveyPart("player", "Consoles Owned","multiple",consolesAvailable)
   for (var i = 0; i < surveyQuestions.length; i++) {
     
-    createSurveyPart(surveyQuestions[i],"question");
+    createSurveyPart("player", surveyQuestions[i],"question");
   }
 }
-
-createPagePlayer();
-
+function createPageGame() {
+  state = "game";
+  $("#surveyArea").html();  
+  $("#TitleAdd").text("Add Game");  
+  $("#change").text("Switch to adding a Player");
+  $("#add-btn").html("Submit Game");  
+  createSurveyPart("game","Name");
+  createSurveyPart("game","Type of Game","dropdown",gameTypes);
+  createSurveyPart("game","Description");
+  createSurveyPart("game","Console","multiple",consolesAvailable)
+  for (var i = 0; i < surveyQuestions.length; i++) {
+    
+    createSurveyPart("game",surveyQuestions[i],"question");
+  }
+}
 // Example starter JavaScript for disabling form submissions if there are invalid fields
-(function() {
+function validateFields() {
   'use strict';
   window.addEventListener('load', function() {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -126,25 +152,62 @@ createPagePlayer();
       }, false);
     });
   }, false);
-})();
+};
 
     // Question: What does this code do?
     $("#add-btn").on("click", function(event) {
       event.preventDefault();
-      var newCharacter = {
-        name: $("#name").val().trim(),
-        role: $("#role").val().trim(),
-        age: $("#age").val().trim(),
-        forcePoints: $("#force-points").val().trim()
-      };
+      if(state == "player") {
+        //add the player
+        var newPlayer = {
+          name: $("#textName").val().trim(),
+          favoriteType: $("#textFavoriteTypeofGame").val().trim(),
+          description: $("#textBio").val().trim(),
+          consoles: [$("#textConsolesOwned").val().trim()],
+          survey: []
+        };
 
-      // Question: What does this code do??
-      $.post("/api/new", newCharacter)
-      .then(function(data) {
-        console.log(data);
-        alert("Adding character...");
-      });
+        for (var i = 0; i < surveyQuestions.length; i++) {
+          newPlayer.survey[i] = $('input[name=optradio'+surveyQuestions[i].replace(/\s/g,'')+']:checked').val();
+        }
+
+        // Question: What does this code do??
+        $.post("/api/newplayer", newPlayer)
+        .then(function(data) {
+          console.log("New match: " + JSON.stringify(data));
+          var gameResults = [];
+          for( i = 0; i < data.length; i++){
+            gameResults.push(data[i].name);
+          }
+          alert("You would like to play "+arrayToSentence(gameResults));
+        });
+      } else {
+        //add the game
+        var newGame = {
+          name: $("#textName").val().trim(),
+          type: $("#texttextFavoriteTypeofGame").val().trim(),
+          description: $("#textBio").val().trim(),
+          console: [$("#textConsolesOwned").val().trim()],
+          survey: []
+        };
+
+        for (var i = 0; i < surveyQuestions.length; i++) {
+          newGame.survey[i] = $('input[name=optradio'+surveyQuestions[i].replace(/\s/g,'')+']:checked').val();
+        }
+
+        // Question: What does this code do??
+        $.post("/api/newgame", newGame)
+        .then(function(data) {
+          alert("Adding game...");
+        });
+      }
+      
     });
+
+
+createPagePlayer();
+//currently validate is not working...
+validateFields();
   </script>
 
 </body>
