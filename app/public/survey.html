@@ -106,7 +106,7 @@ function findMatchGame(argument) {
 }
 function createPagePlayer() {
   state = "player";
-  $("#surveyArea").html();  
+  $("#surveyArea").empty();  
   $("#TitleAdd").text("Add Player");  
   $("#change").text("Switch to adding a Game");
   $("#add-btn").html("Submit Player and Search for Matches");  
@@ -122,7 +122,7 @@ function createPagePlayer() {
 }
 function createPageGame() {
   state = "game";
-  $("#surveyArea").html();  
+  $("#surveyArea").empty();  
   $("#TitleAdd").text("Add Game");  
   $("#change").text("Switch to adding a Player");
   $("#add-btn").html("Submit Game");  
@@ -135,26 +135,37 @@ function createPageGame() {
     createSurveyPart("game",surveyQuestions[i],"question");
   }
 }
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-function validateFields() {
-  'use strict';
-  window.addEventListener('load', function() {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-};
+// Validation (to remake)
+  function validateFields() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  };
+//Change Btn
 
-    // Question: What does this code do?
+    $("#change").on("click", function(event) {
+      event.preventDefault();
+      if(state == "player") {
+        createPageGame();
+      } else {
+        createPagePlayer();
+      }
+      
+    });
+
+//Add btn
     $("#add-btn").on("click", function(event) {
       event.preventDefault();
       if(state == "player") {
