@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Star Wars - Express</title>
+  <title>Game Finder</title>
   <!-- Latest compiled and minified CSS & JS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery.js"></script>
@@ -13,10 +13,10 @@
 
   <div class="container">
     <div class="jumbotron">
-      <h1>Star Wars Express</h1>
-      <h3>The greatest resource in the galaxy for Star Wars statistics!</h3>
+      <h1>Game Finder - Add!</h1>
+      <h3>Add a game or player! Find out which games suit you best! Find friends who would like to play with you!</h3>
       <hr>
-      <a href="/"><button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-eye-open"></span> View Characters</button></a>
+      <a href="/"><button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-eye-open"></span> View Games or Players</button></a>
     </div>
     <div class="row">
 
@@ -24,10 +24,15 @@
 
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title"><strong>Add Characters</strong></h3>
+            <h3 class="panel-title" id="TitleAdd"><strong>Add Game</strong></h3>
           </div>
           <div class="panel-body">
-            <form method="POST" role="form">
+    <button class="btn btn-primary" type="submit" id="change">Switch to adding a Player</button>
+  <form method="POST" class="needs-validation" novalidate>
+    <div id= "surveyArea"></div>
+    <button class="btn btn-primary" type="submit" id="add-btn">Submit game</button>
+  </form>
+          <!--   <form  role="form">
 
               <div class="form-group">
                 <label for="name">Name</label>
@@ -49,11 +54,11 @@
                 <input type="text" class="form-control" id="force-points">
               </div>
 
-            </form>
-            <br>
+            </form> -->
+            <!-- <br>
             <div class="text-right">
               <button type="submit" class="btn btn-primary btn-md" id="add-btn"><span class="glyphicon glyphicon-fire"></span> Add to the Force</button>
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -61,7 +66,68 @@
     </div>
   </div>
 
+
+
   <script type="text/javascript">
+    //variables
+    var gameTypes = ["Video Game","Board Game","Tabletop RPG","Card Game"];
+    var consolesAvailable = ["Computer","Switch","PlayStation 4","Xbox One","Wii U","Nintendo 3DS","PlayStation Vita","Wii","PlayStation 3","XBox 360","Nintendo DS","PlayStation Portable"];
+    var icons = ["glyphicon glyphicon-off","glyphicon glyphicon-king","glyphicon glyphicon-comment","glyphicon glyphicon-modal-window"];
+    var surveyQuestions = ["multiplayer games", "competitive games", "taking time", "stories", "turn based games", "fantasy vs. sci-fi", "convoluted game design or play", "difficult games", "ABSOLUTE POWER!", "options"];
+    var surveyAnswers = ["Strongly Dislike","Dislike","Neither Like Nor Dislike","Like","Love"];
+
+function createSurveyPart(name, type) {
+  //Create the row...questions have both the radial buttons and have the name worked into a question, so if/then statement for the whole thing works best
+  if (type == "question") {
+    html = '<div class="form-row"><div class="col-lg-6"><label for="validation'+name.replace(/\s/g,'')+'">My feelings about '+name+':</label><p>';
+    for(i = 0; i < 5; i++){
+      html = html + '<label class="radio-inline"><input type="radio" name="optradio'+name.replace(/\s/g,'')+'" value = '+i+'>'+surveyAnswers[i]+'</label>';
+    }
+    html = html + '<p><div class="invalid-feedback">Please provide an answer.</div></div></div><br>';
+
+  } else {
+    html = '<div class="form-row"><div class="col-lg-6"><label for="validation'+name.replace(/\s/g,'')+'">'+name+'</label><input type="text" class="form-control" id="validation'+name.replace(/\s/g,'')+'" placeholder="'+name+'" required><div class="invalid-feedback">Please provide an answer.</div></div></div><br>';
+  }
+  $("#surveyArea").append(html);
+}
+function createPagePlayer() {
+  $("#surveyArea").html();  
+  $("#TitleAdd").text("Add Player");  
+  $("#change").text("Switch to adding a Player");  
+  $("#add-btn").html("Submit Player and Search for Matches");  
+  $("#surveyArea").html();  
+
+  createSurveyPart("Name");
+  createSurveyPart("Favorite Type of Game","dropdown",gameTypes);
+  createSurveyPart("Bio");
+  createSurveyPart("Consoles Owned","multiple",consolesAvailable)
+  for (var i = 0; i < surveyQuestions.length; i++) {
+    
+    createSurveyPart(surveyQuestions[i],"question");
+  }
+}
+
+createPagePlayer();
+
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
     // Question: What does this code do?
     $("#add-btn").on("click", function(event) {
       event.preventDefault();

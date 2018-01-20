@@ -1,10 +1,19 @@
 
 var path = require("path");
+var games = require("../data/games");
+var players = require("../data/players");
 
 function expressify(app){
+
+  // Get all players
+  app.get("/api/all", function(req, res) {
+    res.json(games);
+  });
+
   // Search for Specific Game (or all games) - provides JSON
     app.get("/api/games/:games?", function(req, res) {
       var chosen = req.params.games;
+      console.log("Looking for "+chosen);
 
       if (chosen) {
         console.log(chosen);
@@ -90,10 +99,6 @@ function expressify(app){
   // })
 
 
-    // Get all players
-    app.get("/api/all", function(req, res) {
-      res.json(games);
-    });
 
 }
 
